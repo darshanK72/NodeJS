@@ -1,0 +1,17 @@
+{
+  "name": "mypackage",
+  "version": "1.0.0",
+  "description": "application for learning npm",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Darshan Khairnar",
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

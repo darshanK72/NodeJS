@@ -1,2 +1,2 @@
 # NodeJS
-This repository consist of all practice codes &amp; files of NodeJS.
+Practice codes &amp; files of Node.JS, MongoDB &amp; Express.JS.

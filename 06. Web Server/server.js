@@ -1,17 +1,29 @@
 const http = require('http');
 const fs = require('fs');
 const url = require('url');
-const customEvent = require('./Modules/customEvent');
-const replaceHTML = require('./Modules/replaceHTML');
+
+
+// Reusable Functions
+
+const replaceHTML = function(template,book){
+    let bookTemplate = template.replace('{{title}}',book.title);
+    bookTemplate = bookTemplate.replace('{{author}}',book.author);
+    bookTemplate = bookTemplate.replace('{{pages}}',book.pages);
+    return bookTemplate;
+}
+
+// Constants
 
 const host = '127.0.0.1';
 const port = 3000;
 
+// Loding Files
+
 let indexFile = fs.readFileSync('index.html', 'utf-8');
-let contactFile = fs.readFileSync('./Templates/contact.html', 'utf-8');
-let aboutFile = fs.readFileSync('./Templates/about.html', 'utf-8');
-let bookFile = fs.readFileSync('./Templates/book.html', 'utf-8');
-let booksObj = JSON.parse(fs.readFileSync('./Data/db.json', 'utf-8'));
+let contactFile = fs.readFileSync('contact.html', 'utf-8');
+let aboutFile = fs.readFileSync('about.html', 'utf-8');
+let bookFile = fs.readFileSync('book.html', 'utf-8');
+let booksObj = JSON.parse(fs.readFileSync('db.json', 'utf-8'));
 
 let bookTemplateArray = booksObj.books.map((book) => {
     return replaceHTML(bookFile, book);
@@ -78,10 +90,4 @@ server.listen(port, host, () => {
 })
 
 
-let myEventEmmiter = new events.EventEmitter();
 
-myEventEmmiter.on('myevent',(id,name)=>{
-    console.log(`some event with ${id} : ${name} happened`);
-})
-
-myEventEmmiter.emit('myevent',1,'click');

@@ -4,12 +4,15 @@ const { getAllProducts,
     getProduct,
     updateProduct,
     patchProduct,
-    deleteProduct
+    deleteProduct,
+    checkProduct,
+    validateBody
 } = require('../controllers/product.controller')
 
 const productsRouter = express.Router();
 
-productsRouter.route('/').get(getAllProducts).post(addProduct);
+productsRouter.param('id',checkProduct);
+productsRouter.route('/').get(getAllProducts).post(validateBody,addProduct);
 productsRouter.route('/:id').get(getProduct).put(updateProduct).patch(patchProduct).delete(deleteProduct);
 
 module.exports = productsRouter;

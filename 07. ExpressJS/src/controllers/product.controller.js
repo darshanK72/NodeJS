@@ -10,6 +10,21 @@ function getProductById(id) {
     return database.products.find(item => item.id == id);
 }
 
+function checkProduct(req,res,next,value){
+    const product = getProductById(value);
+    if (!product) {
+        return res.status(404).send("Product Not Found");
+    }
+    next();
+}
+
+function validateBody(req,res,next){
+    if(!req.body.title || !req.body.price || !req.body.description){
+        return res.status(400).send("Bad Request");
+    }
+    next();
+}
+
 function updateDatabase(database) {
     fs.writeFile('./data/db.json', JSON.stringify(database), (error) => {
         if (error) {
@@ -28,9 +43,6 @@ const getAllProducts = (req, res) => {
 
 const getProduct = (req, res) => {
     let product = getProductById(req.params.id);
-    if (!product) {
-        return res.status(404).send("Product Not Found");
-    }
     return res.status(200).json(product);
 }
 
@@ -55,9 +67,6 @@ const addProduct = (req, res) => {
 const updateProduct = (req, res) => {
     let products = getProducts();
     let product = getProductById(req.params.id);
-    if (!product) {
-        return res.status(404).send("Not Found")
-    }
     let indexOfProduct = products.indexOf(product);
     product = { ...product, ...req.body };
     products[indexOfProduct] = product;
@@ -75,9 +84,6 @@ const updateProduct = (req, res) => {
 const patchProduct = (req, res) => {
     let products = getProducts();
     let product = getProductById(req.params.id);
-    if (!product) {
-        return res.status(404).send("Not Found")
-    }
     let indexOfProduct = products.indexOf(product);
     product = { ...product, ...req.body };
     products[indexOfProduct] = product;
@@ -94,9 +100,6 @@ const patchProduct = (req, res) => {
 const deleteProduct = (req, res) => {
     let products = getProducts();
     let product = getProductById(req.params.id);
-    if (!product) {
-        return res.status(404).send("Not Found")
-    }
     database.products = products.filter((product) => product.id != req.params.id);
     try {
         updateDatabase(database)
@@ -113,5 +116,7 @@ module.exports = {
     addProduct,
     updateProduct,
     patchProduct,
-    deleteProduct
+    deleteProduct,
+    checkProduct,
+    validateBody
 }

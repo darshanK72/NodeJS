@@ -1,10 +1,6 @@
-const express = require('express');
 const fs = require('fs');
-const morgan = require('morgan');
-const app = express();
-const port = 3000;
 
-const database = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
+const database = JSON.parse(fs.readFileSync('./data/db.json', 'utf-8'));
 
 function getProducts() {
     return database.products;
@@ -15,15 +11,11 @@ function getProductById(id) {
 }
 
 function updateDatabase(database) {
-    fs.writeFile('./db.json', JSON.stringify(database), (error) => {
+    fs.writeFile('./data/db.json', JSON.stringify(database), (error) => {
         if (error) {
             throw error;
         }
     })
-}
-
-const getHelloWorld = (req, res) => {
-    return res.send("Hello World");
 }
 
 const getAllProducts = (req, res) => {
@@ -115,12 +107,11 @@ const deleteProduct = (req, res) => {
     }
 }
 
-app.use(express.json());
-app.use(morgan('dev'))
-
-app.route('/products').get(getAllProducts).post(addProduct);
-app.route('/products/:id').get(getProduct).put(updateProduct).patch(patchProduct).delete(deleteProduct);
-
-app.listen(port, () => {
-    console.log("Server is runnint at http://localhost:3000/");
-})
+module.exports = {
+    getAllProducts,
+    getProduct,
+    addProduct,
+    updateProduct,
+    patchProduct,
+    deleteProduct
+}

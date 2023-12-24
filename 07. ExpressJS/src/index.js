@@ -1,10 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const productsRouter = require('./routes/product.router');
 
 dotenv.config({path:'./config.env'});
 
-const productsRouter = require('./routes/product.router');
 const app = express();
 const port = process.env.PORT || 3000;
 

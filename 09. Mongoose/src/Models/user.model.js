@@ -32,13 +32,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
         minLength: [4, "Name must be 4 or more characters"],
-        require: true
+        require: true,
+        unique:true
     },
     username: {
         type: String,
         trim: true,
         minlength: [4, 'Username must be minimum 4 or more characters'],
-        maxlength: [12, 'Username must be maximum 12 or less characters']
+        maxlength: [12, 'Username must be maximum 12 or less characters'],
+        unique:true
     },
     email: {
         type: String,
@@ -47,7 +49,8 @@ const userSchema = new mongoose.Schema({
         validate: {
             validator: (value) => /\S+@\S+\.\S+/.test(value),
             message: 'Invalid email address',
-        }
+        },
+        unique:true
     },
     phone: {
         type: String,

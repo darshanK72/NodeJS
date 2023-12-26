@@ -1,18 +1,20 @@
-const castErrors = (err, res) => {
+const castErrorHandler = (err, res) => {
     res.status(400).json({
+        status:err.status,
         message: `Invalid value ${err.value} was provided for ${err.path}.`
     })
 }
 
-const uniqueError = (err, res) => {
+const uniqueErroHandler = (err, res) => {
     const field = Object.keys(err.keyValue)[0];
     const value = err.keyValue[field];
     res.status(400).json({
+        status:err.status,
         message: `The ${field} '${value}' is already taken. Please choose a different ${field}.`
     })
 }
 
-const validationErrors = (err, res) => {
+const validationErrorHandler = (err, res) => {
     const errorsByField = {};
     for (const field in err.errors) {
         if (err.errors.hasOwnProperty(field)) {
@@ -20,12 +22,12 @@ const validationErrors = (err, res) => {
         }
     }
     res.status(400).json({
-        message: 'Validation failed',
+        message: 'Validation Failed',
         errors: errorsByField,
     });
 }
 
-export const prodErrors = (err, res) => {
+export const prodErrorHandler = (err, res) => {
     if (err.isOperational) {
         res.status(err.statusCode).json({
             status: err.status,
@@ -33,12 +35,12 @@ export const prodErrors = (err, res) => {
         })
     } else {
         if (err.name == 'CastError') {
-            castErrors(err, res);
+            castErrorHandler(err, res);
         } else if (err.code == 11000) {
-            uniqueError(err, res);
+            uniqueErroHandler(err, res);
         }
         else if (err.name == 'ValidationError') {
-            validationErrors(err, res);
+            validationErrorHandler(err, res);
         } else {
             res.status(500).json(err);
         }

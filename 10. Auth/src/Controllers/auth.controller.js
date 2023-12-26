@@ -13,7 +13,7 @@ export const signUp = asyncWrapper(async (req,res) => {
 export const signIn = asyncWrapper(async (req,res) => {
     const {username,password} = req.body;
     const user = await User.findByUsername(username);
-    const isPasswordMatch = user.comparePassword(password);
+    const isPasswordMatch = await user.comparePassword(password);
     if(!isPasswordMatch){
         throw new BadRequestError("Password Do Not Match");
     }

@@ -34,6 +34,11 @@ const userSchema = new mongoose.Schema({
         minLength: [8, 'Password must be minimum of length 8'],
         select: false
     },
+    role: {
+        type:String,
+        enum:["user","admin"],
+        default:"user"
+    },
     phone: {
         type: String,
         trim: true,

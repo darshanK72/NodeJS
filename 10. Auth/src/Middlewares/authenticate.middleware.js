@@ -12,11 +12,11 @@ export const authenticate = asyncWrapper(async (req, res, next) => {
         throw new BadRequestError("You are not logged in");
     }
     const decodedToken = await util.promisify(jwt.verify)(token,process.env.ACCESS_TOKEN_SECRET)
-    console.log(decodedToken);
 
     const user = await User.findById(decodedToken.id);
     if(!user){
         throw new NotFoundError("User Not Found");
     }
+    req.user = user;
     next();
 })

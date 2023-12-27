@@ -27,6 +27,20 @@ const validationErrorHandler = (err, res) => {
     });
 }
 
+const tokenExpiredErrorHandler = (err,res) => {
+    res.status(403).json({
+        status:err.status,
+        message:"Token Expired,Pleae Login Again"
+    })
+}
+
+const jsonWebTokenErrorHandler = (err,res) => {
+    res.status(403).json({
+        status:err.status,
+        message:"Token Signature is Invalid,Please Login Again"
+    })
+}
+
 export const prodErrorHandler = (err, res) => {
     if (err.isOperational) {
         res.status(err.statusCode).json({
@@ -38,10 +52,13 @@ export const prodErrorHandler = (err, res) => {
             castErrorHandler(err, res);
         } else if (err.code == 11000) {
             uniqueErroHandler(err, res);
-        }
-        else if (err.name == 'ValidationError') {
+        }else if (err.name == 'ValidationError') {
             validationErrorHandler(err, res);
-        } else {
+        }else if(err.name == 'TokenExpiredError'){
+            tokenExpiredErrorHandler(err,res);
+        }else if(err.name == 'JsonWebTokenError'){
+            jsonWebTokenErrorHandler(err,res);
+        }else {
             res.status(500).json(err);
         }
     }

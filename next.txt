@@ -1,0 +1,9 @@
+Multer
+Passportjs
+GraphQL
+Socket.io
+WebSockets
+VideoJs
+NestJs
+ReactJs
+NextJs

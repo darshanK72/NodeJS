@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import { NotFoundError } from "../../../09. Mongoose/src/Errors/NotFoundError.js";
-import { BadRequestError } from "../Errors/BadRequestError.js";
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -52,6 +52,15 @@ const userSchema = new mongoose.Schema({
     refreshToken: {
         type: String,
         select: false
+    },
+    passwordResetToken: {
+        type:String
+    },
+    passwordResetTokenExpires: {
+        type: Date
+    },
+    passwordResetAt:{
+        type:Date
     }
 }, { versionKey: false })
 
@@ -97,8 +106,24 @@ userSchema.methods.generateRefreshToken = async function () {
     return refreshToken;
 }
 
+userSchema.methods.generatePasswordResetToken = async function(){
+    const passwordResetToken = crypto.randomBytes(32).toString('hex');
+    this.passwordResetToken = crypto.createHash("sha256").update(passwordResetToken).digest('hex');
+    this.passwordResetTokenExpires = Date.now() + 10*60*1000;
+    await this.save();
+    return passwordResetToken;
+}
+
 userSchema.statics.findByUsername = async function (username) {
     const user = await this.findOne({ username }).select("+password");
+    if (!user) {
+        throw new NotFoundError("User Not Found");
+    }
+    return user;
+}
+
+userSchema.statics.findByEmail = async function (email) {
+    const user = await this.findOne({ email }).select("+password");
     if (!user) {
         throw new NotFoundError("User Not Found");
     }

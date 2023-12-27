@@ -7,6 +7,7 @@ import userRouter from './Routes/user.route.js';
 import { devErrorHandler } from './Utils/devErrorHandler.js';
 import { prodErrorHandler } from './Utils/prodErrorHandler.js';
 import { authenticate } from './Middlewares/authenticate.middleware.js';
+import { NotFoundError } from './Errors/NotFoundError.js';
 
 dotenv.config({path:"./config.env"});
 

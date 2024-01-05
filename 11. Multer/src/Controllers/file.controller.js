@@ -34,11 +34,7 @@ export const uploadFile = asyncWrapper(async (req,res) => {
 
     const file = await File.create({
         fileName:req.file.originalname,
-        url:uploadResponse.secure_url,
-        image:{
-            data:req.file.filename,
-            contentType:'image/png'
-        }
+        url:uploadResponse.secure_url
     })
 
     if(!file){

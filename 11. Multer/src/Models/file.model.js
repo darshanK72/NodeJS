@@ -10,10 +10,6 @@ const fileSchema = new mongoose.Schema({
         type:String,
         unique:true,
         require:true
-    },
-    image:{
-        data:Buffer,
-        contentType:String
     }
 },{versionKey:false})
 
